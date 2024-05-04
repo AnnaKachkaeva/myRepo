@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  task1
+//  task2
 //
 //  Created by Анна Качкаева on 02.05.2024.
 //
@@ -13,42 +13,25 @@ struct view1: View {
     }
 }
 
-var scrollView: some View {
-    ScrollView {
-            ForEach(0..<100) { i in
-                Text("row \(i)")
-                          .font(.title).frame(maxWidth: .infinity)
-            }
-        }.safeAreaInset(edge: .bottom) {
-            Text("")
-                .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 30)
-                .background(.cyan.opacity(0.5))
-        }
-}
+var textView: some View {
+    let text: Text = Text("Big bold text ")
+        .font(.system(size: 30, weight: .bold, design: .default)).foregroundColor(.pink)
+        + Text("ugly-small-text")
+        .font(.system(size: 12, weight: .bold, design: .monospaced))
+        + Text("\nnextLineUexpectablyLongOne")
 
-var colorView: some View {
-    Text("").frame(maxWidth: .infinity, maxHeight: 30).background(.pink.opacity(0.5))
+    return text.multilineTextAlignment(.leading)
 }
-
 
 struct MainView: View {
+    @State private var width: Double = 300
+    private let insets = EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15)
+    
     var body: some View {
-        TabView {
-            scrollView
-                .tabItem {
-                    Label("scroll me", systemImage: "list.dash")
-                }
-        }.onAppear {
-            let appearance = UITabBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.stackedLayoutAppearance.normal.iconColor = .gray
-            appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.gray]
-            
-            appearance.stackedLayoutAppearance.selected.iconColor = UIColor(Color.black)
-            appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(Color.black)]
-            
-            UITabBar.appearance().standardAppearance = appearance
-            UITabBar.appearance().scrollEdgeAppearance = appearance
-        }
+        VStack {
+            textView.frame(width: width, height: 200).border(.red)
+            Slider(value: $width, in: 100...300).accentColor(.pink)
+//            Text("width = \(width, specifier: "%.1f")")
+        }.padding(insets)
     }
 }
